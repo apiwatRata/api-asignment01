@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  node-app:
+    # Use 'build: .' if you have a local Dockerfile, 
+    # or 'image: node:20-alpine' to use a base image directly.
+    build: . 
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://admin:p@ssw0rd@postgres:5432/default
+      - REDIS_URL=redis://redis:6379
+      - PORT=3000
+      # These variables are used in the Node.js app's connection logic
+    depends_on:
+      - postgres
+      - redis
+    # A script might be needed to ensure the app waits for the DB to be ready
+    # command: ["./wait-for-it.sh", "postgres:5432", "--", "npm", "start"]
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: p@ssw0rd
+      POSTGRES_DB: default
+    volumes:
+      # Persist data even if the container is removed
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # Exposes the port to the host machine for local access (e.g., via GUI tools)
+      - "5432:5432" 
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
