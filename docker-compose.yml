@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   node-app:
     # Use 'build: .' if you have a local Dockerfile, 
