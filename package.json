@@ -13,6 +13,8 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^5.2.1",
+    "pg": "^8.18.0",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.5"
   }
