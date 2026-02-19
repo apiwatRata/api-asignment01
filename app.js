@@ -1,20 +1,16 @@
-// โหลด Express
 const express = require("express");
 const app = express();
-
-// กำหนดพอร์ต
+const userRoutes = require("./routes/user");
+const db = require('./src/models');
 const PORT = process.env.PORT;
 
-// กำหนด route หลัก
-app.get("/", (req, res) => {
-  res.send("Hello from Node.js + Express!");
-});
+db.sequelize.sync();
+app.use(express.json());
 
-// ตัวอย่าง route เพิ่มเติม
-app.get("/about", (req, res) => {
-  res.send("This is the About page.");
-});
+app.use('/users', userRoutes());
+app.get('/recommendations/batch', (req, res) => {
 
+});
 // เริ่มต้น server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
