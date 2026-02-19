@@ -1,7 +1,7 @@
 const { Content, UserWatchHistory} = require('../models');
 const { Op} = require('sequelize');
 class ContentRepository  {
-    async CandidateContent(user_id = 0){
+    async CandidateContent(user_id = 0, limit = 20){
         let subQuery =  await UserWatchHistory.findAll({
             attributes: ['content_id'],
             where: { user_id: user_id },
@@ -14,7 +14,8 @@ class ContentRepository  {
                 id: {
                     [Op.notIn]: subQuery
                 }
-            }
+            },
+            limit: limit,
         })
         return result;
     }

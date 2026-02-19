@@ -1,7 +1,7 @@
 const {UserWatchHistory, Content} = require ('../models');
 
 class UserWatchHistoryRepository {
-    async watchHistory (user_id = 0, limit = 50) {
+    async watchHistory (user_id = 0, limit = 20) {
         const result = await UserWatchHistory.findAll({
             attributes: ['watched_at'],
             where: {
@@ -12,6 +12,7 @@ class UserWatchHistoryRepository {
                 attributes: ['id', 'genre'],
             }],
             order: [['watched_at', 'DESC']],
+            limit: limit,
         });
 
         return result.map (item => ({

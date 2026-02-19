@@ -1,10 +1,18 @@
 'use strict';
 const { Model } = require('sequelize');
+const dayjs = require('dayjs');
 
 module.exports = (sequelize, DataTypes) => {
     class Content extends Model {
         static associate(models) {
             Content.hasMany(models.UserWatchHistory, { foreignKey: 'content_id' });
+        }
+
+        static getBoost(created_at){
+            const current_time = Date.now()
+            const days_since_creation = dayjs(current_time).diff(dayjs(created_at), 'day');
+            console.log(1.0 / (1.0 + days_since_creation / 365.0));
+            return 1.0 / (1.0 + days_since_creation / 365.0)
         }
     }
 
