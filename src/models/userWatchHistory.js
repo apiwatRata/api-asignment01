@@ -8,23 +8,10 @@ module.exports = (sequelize, DataTypes) => {
             UserWatchHistory.belongsTo(models.Content, { foreignKey: 'content_id' });
         }
 
-        static async genrePerferences() {
-            const genre_counts =  await sequelize.models.UserWatchHistory.findAll({
-                include:[{
-                    model: sequelize.models.Content,
-                    attributes:[]
-                }],
-                attributes:[
-                    [Sequelize.col('Content.genre'),'genre'],
-                    [Sequelize.fn('COUNT',Sequelize.col('Content.id')), 'watcher']
-                ],
-                group:['Content.genre'],
-                raw: true
-            });
+        static genrePerferences(genre_count = {}) {
             let total_watches =  0;
-            genre_counts.map(genre => {total_watches += Number(genre.watcher);});
+            Object.values(genre_count).map(count => {total_watches += Number(count);});
             const result = genre_counts.reduce((acc, item) => {
-                console.log('acc',acc,item);
                 acc[item.genre] = Number(item.watcher)/total_watches; // แปลง watcher เป็น number
                 return acc;
             }, {});

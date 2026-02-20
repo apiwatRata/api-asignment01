@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         static getBoost(created_at){
             const current_time = Date.now()
             const days_since_creation = dayjs(current_time).diff(dayjs(created_at), 'day');
-            console.log(1.0 / (1.0 + days_since_creation / 365.0));
             return 1.0 / (1.0 + days_since_creation / 365.0)
         }
     }
