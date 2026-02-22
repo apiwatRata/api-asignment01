@@ -11,12 +11,8 @@ module.exports = (sequelize, DataTypes) => {
         static genrePerferences(genre_count = {}) {
             let total_watches =  0;
             Object.values(genre_count).map(count => {total_watches += Number(count);});
-            const result = genre_counts.reduce((acc, item) => {
-                acc[item.genre] = Number(item.watcher)/total_watches; // แปลง watcher เป็น number
-                return acc;
-            }, {});
-
-            return result;
+            Object.keys(genre_count).map(genre => {genre_count[genre] = genre_count[genre]/total_watches;});
+            return genre_count;
         }
     }
 

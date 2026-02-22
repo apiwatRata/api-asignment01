@@ -23,8 +23,11 @@ async function generateRecommend(user_id = 0, limit = 20){
 
     await sleep(randomInt(30,50));
 
-    if(randomNumber(0,1) < 0.015)
-        return false;
+    if(randomNumber(0,1) < 0.015){
+        const error = new Error("Recommendation model is temporarily unavailable");
+        error.statusCode = 503;
+        throw error;
+    }
 
     const scored_candidateds = [];
     let score = 0;

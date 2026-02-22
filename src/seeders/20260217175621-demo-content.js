@@ -26,7 +26,7 @@ module.exports = {
       return {
         title: randomTitle(index),
         genre: genres[Math.floor(random() * genres.length)],
-        popularity_score: parseFloat((random() * 10).toFixed(1)) 
+        popularity_score: parseFloat(random().toFixed(2))
       };
     }
 

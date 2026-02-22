@@ -16,7 +16,7 @@ module.exports = {
             case 400:
                 return {"error": "invalid_parameter", "message": "Invalid limit parameter"};
             case 404:
-                return {"error": "user_not_found", "message": "User with ID {user_id} does not exist".replace("{user_id}",user_id)};
+                return {"error": "user_not_found", "message": `User with ID ${user_id} does not exist`};
             case 500:
                 return {"error": "internal_error", "message": "An unexpected error occurred"}
             case 503:
