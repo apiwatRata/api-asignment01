@@ -1,8 +1,10 @@
+// require('dotenv').config(); // for dev environment
+
 const express = require("express");
 const app = express();
-const userRoutes = require("./routes/user");
+const userRoutes = require("./src/routes/user");
 const db = require('./src/models');
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 db.sequelize.sync();
 app.use(express.json());
@@ -11,7 +13,7 @@ app.use('/users', userRoutes());
 app.get('/recommendations/batch', (req, res) => {
 
 });
-// เริ่มต้น server
+
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running at PORT ${PORT}`);
 });
