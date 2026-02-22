@@ -21,6 +21,13 @@ class UserWatchHistoryRepository {
             watched_at: item.watched_at
         }))
     }
+
+    async addWatchHistory (user_id, content_id) {
+        return await UserWatchHistory.create({
+            user_id: user_id,
+            content_id: content_id,
+        });
+    }
 }
 
 module.exports = new UserWatchHistoryRepository();

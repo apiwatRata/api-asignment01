@@ -32,5 +32,21 @@ module.exports = {
         return await client.del(key);
     },
 
+    findKeyUserId: async (user_id) => {
+        let cursor = "0";
+        let keys = [];
+
+        do {
+            const reply = await client.scan(cursor, {
+                MATCH: `rec:user:${user_id}:limit:*`,
+                COUNT: 100
+            });
+            cursor = parseInt(reply.cursor);
+            keys = keys.concat(reply.keys);
+        } while (cursor !== 0);
+
+        return keys;
+    },
+
     client
 };

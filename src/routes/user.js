@@ -60,7 +60,37 @@ function UserRoutes() {
                 return res.status(500).json(errorResponseBody(500));
             }
         }
-    })
+    });
+
+    router.get('/:user_id/watch/:content_id', async (req, res) => {
+        try{
+            const { user_id, content_id } = req.params;
+            if(!user_id || isNaN(user_id) || !content_id || isNaN(content_id)) {
+                const error = new Error("Invalid Parameters");
+                error.statusCode = 400; // Bad Request
+                throw error;
+            }
+            await recommendController.addWatchHistory(user_id, content_id);
+            return res.json({
+                status:'success',
+                metadata:{
+                    generated_at: new Date().toISOString()
+                }
+            })
+        }catch(e){
+            console.log(e);
+            if(e.statusCode === 404){
+                return res.status(e.statusCode).json(errorResponseBody(e.statusCode, req.params.user_id));
+            }else if(e.statusCode === 400){
+                return res.status(e.statusCode).json(errorResponseBody(e.statusCode));
+            }else if (e.statusCode === 503){
+                return res.status(e.statusCode).json(errorResponseBody(e.statusCode));
+            }else{
+                return res.status(500).json(errorResponseBody(500));
+            }
+        }
+
+    });
 
     return router;
 }

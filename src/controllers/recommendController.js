@@ -7,8 +7,12 @@ const { calculateScore } = require('../services/recommend');
 
 async function generateRecommend(user_id = 0, limit = 20){
     const user = await UserRepositoty.userContext(user_id);
-    if(!user)
-        return false;
+    if(!user){
+        const error = new Error(`User with ID ${user_id} does not exist`);
+        error.statusCode = 404;
+        throw error;
+    }
+
     const watch_history = await UserWatchHitoryRepository.watchHistory(user_id,limit);
     const genre_count = {};
     const watch_content_ids = watch_history.map(item => {
@@ -45,6 +49,22 @@ async function generateRecommend(user_id = 0, limit = 20){
     return scored_candidateds;
 }
 
+async function addWatchHistory(user_id = 0, content_id = 0){
+    const user = await UserRepositoty.userContext(user_id);
+    if(!user){
+        const error = new Error(`User with ID ${user_id} does not exist`);
+        error.statusCode = 404;
+        throw error;
+    }
+    const content = await ContentRepository.getContent(content_id);
+    if(!content){
+        const error = new Error("Invalid limit parameter");
+        error.statusCode = 400;
+        throw error;
+    }
+    return await UserWatchHitoryRepository.addWatchHistory(user_id, content_id);
+}
 module.exports  = {
-    generateRecommend
+    generateRecommend,
+    addWatchHistory
 }

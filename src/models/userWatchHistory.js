@@ -1,6 +1,6 @@
 'use strict';
 const { Model, Sequelize} = require('sequelize');
-
+const redisService = require('../services/redis');
 module.exports = (sequelize, DataTypes) => {
     class UserWatchHistory extends Model {
         static associate(models) {
@@ -49,6 +49,23 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'UserWatchHistory',
         tableName: 'user_watch_history',
+        timestamps: false,
+        hooks: {
+            afterCreate: async (watch_log, options) => {
+                const keys = await redisService.findKeyUserId(watch_log.user_id);
+                keys.map(key => {
+                    redisService.del(key);
+                })
+            },
+
+            afterUpdate: async (watch_log, options) => {
+                const keys = await redisService.findKeyUserId(watch_log.user_id);
+                keys.map(key => {
+                    redisService.del(key);
+                })
+            }
+
+        }
     });
 
     return UserWatchHistory;

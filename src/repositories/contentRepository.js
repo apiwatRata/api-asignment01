@@ -19,6 +19,10 @@ class ContentRepository  {
         })
         return result;
     }
+
+    async getContent(id = 0) {
+        return await Content.findByPk(id);
+    }
 }
 
 module.exports = new ContentRepository();
